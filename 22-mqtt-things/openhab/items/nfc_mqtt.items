@@ -1,0 +1,35 @@
+// Kapitel 22 – Items der NFC-Leser
+// Datei: $OPENHAB_CONF/items/nfc_mqtt.items
+// Ereignisse (event, gesture, security) sind Trigger-Kanäle – dafür gibt es keine Items,
+// Regeln hängen direkt an den Kanälen (Kapitel 23).
+
+Group gNFC "NFC-Leser" <network>
+String NFC_Gateway_Status "NFC-Gateway [MAP(nfc_status.map):%s]" <network> (gNFC) { channel="mqtt:topic:mosquitto:nfc_gateway:status" }
+String NFC_Gateway_Anlernen "Anlernen" <settings> (gNFC) { channel="mqtt:topic:mosquitto:nfc_gateway:learn", autoupdate="false" }
+String NFC_Gateway_Sperren "Karte sperren" <lock> (gNFC) { channel="mqtt:topic:mosquitto:nfc_gateway:block", autoupdate="false" }
+String NFC_Gateway_Entsperren "Karte entsperren" <lock> (gNFC) { channel="mqtt:topic:mosquitto:nfc_gateway:unblock", autoupdate="false" }
+
+
+Group gNFC_Nachttisch "NFC Nachttisch" <network> (gNFC)
+String NFC_Nachttisch_Karte  "Karte Nachttisch [%s]"           <network> (gNFC_Nachttisch) { channel="mqtt:topic:mosquitto:nfc_nachttisch:card" }
+String NFC_Nachttisch_Zuletzt "Zuletzt Nachttisch [%s]"        <network> (gNFC_Nachttisch) { channel="mqtt:topic:mosquitto:nfc_nachttisch:last" }
+String NFC_Nachttisch_Status "Prüfung Nachttisch [MAP(nfc_sicherheit.map):%s]" <shield> (gNFC_Nachttisch) { channel="mqtt:topic:mosquitto:nfc_nachttisch:status" }
+String NFC_Nachttisch_Signal "Signal Nachttisch"               <light>   (gNFC_Nachttisch) { channel="mqtt:topic:mosquitto:nfc_nachttisch:signal", autoupdate="false" }
+
+Group gNFC_Kueche "NFC Küche" <network> (gNFC)
+String NFC_Kueche_Karte  "Karte Küche [%s]"           <network> (gNFC_Kueche) { channel="mqtt:topic:mosquitto:nfc_kueche:card" }
+String NFC_Kueche_Zuletzt "Zuletzt Küche [%s]"        <network> (gNFC_Kueche) { channel="mqtt:topic:mosquitto:nfc_kueche:last" }
+String NFC_Kueche_Status "Prüfung Küche [MAP(nfc_sicherheit.map):%s]" <shield> (gNFC_Kueche) { channel="mqtt:topic:mosquitto:nfc_kueche:status" }
+String NFC_Kueche_Signal "Signal Küche"               <light>   (gNFC_Kueche) { channel="mqtt:topic:mosquitto:nfc_kueche:signal", autoupdate="false" }
+
+Group gNFC_Flur "NFC Flur" <network> (gNFC)
+String NFC_Flur_Karte  "Karte Flur [%s]"           <network> (gNFC_Flur) { channel="mqtt:topic:mosquitto:nfc_flur:card" }
+String NFC_Flur_Zuletzt "Zuletzt Flur [%s]"        <network> (gNFC_Flur) { channel="mqtt:topic:mosquitto:nfc_flur:last" }
+String NFC_Flur_Status "Prüfung Flur [MAP(nfc_sicherheit.map):%s]" <shield> (gNFC_Flur) { channel="mqtt:topic:mosquitto:nfc_flur:status" }
+String NFC_Flur_Signal "Signal Flur"               <light>   (gNFC_Flur) { channel="mqtt:topic:mosquitto:nfc_flur:signal", autoupdate="false" }
+
+Group gNFC_Multimedia "NFC Multimedia" <network> (gNFC)
+String NFC_Multimedia_Karte  "Karte Multimedia [%s]"           <network> (gNFC_Multimedia) { channel="mqtt:topic:mosquitto:nfc_multimedia:card" }
+String NFC_Multimedia_Zuletzt "Zuletzt Multimedia [%s]"        <network> (gNFC_Multimedia) { channel="mqtt:topic:mosquitto:nfc_multimedia:last" }
+String NFC_Multimedia_Status "Prüfung Multimedia [MAP(nfc_sicherheit.map):%s]" <shield> (gNFC_Multimedia) { channel="mqtt:topic:mosquitto:nfc_multimedia:status" }
+String NFC_Multimedia_Signal "Signal Multimedia"               <light>   (gNFC_Multimedia) { channel="mqtt:topic:mosquitto:nfc_multimedia:signal", autoupdate="false" }

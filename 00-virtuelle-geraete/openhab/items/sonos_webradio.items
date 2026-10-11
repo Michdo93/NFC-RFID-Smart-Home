@@ -1,0 +1,65 @@
+// ============================================================================
+// Sonos-Lautsprecher und Webradio (virtuell) – Namen wie in xbox-360-openhab-controller
+//   Lautstärke:  <Raum>_Sonos_Lautsprecher_Lautstaerke  (Konferenz: Sonos_Playbar)
+//   Webradio:    <Raum>_Webradio_<Sender>   ON = Sender läuft
+// Mit echter Hardware: Kanal "volume" des Sonos-Bindings; die Sender-Schalter setzt
+// eine Regel auf den Kanal "playuri" um.
+// ============================================================================
+
+Group:Dimmer:AVG gLautstaerke "Lautstärke (alle) [%d %%]" <soundvolume>
+Group:Switch:OR(ON,OFF) gWebradio "Webradio läuft [%s]" <radio>
+
+Group iKonferenz_Sonos_Playbar "Sonos Konferenzraum" <soundvolume> (gKonferenz) ["Speaker"]
+Player iKonferenz_Sonos_Playbar_Steuerung "Wiedergabe Konferenzraum" <player> (iKonferenz_Sonos_Playbar) ["Control", "MediaControl"]
+Dimmer iKonferenz_Sonos_Playbar_Lautstaerke "Lautstärke Konferenzraum [%d %%]" <soundvolume> (iKonferenz_Sonos_Playbar, gLautstaerke, gDimmbar) ["Control", "SoundVolume"]
+Group iKonferenz_Webradio "Webradio Konferenzraum" <radio> (iKonferenz_Sonos_Playbar)
+Switch iKonferenz_Webradio_SWR3 "SWR3 Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+Switch iKonferenz_Webradio_bigFM_BW "bigFM BW Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+Switch iKonferenz_Webradio_Energy_Stuttgart "Energy Stuttgart Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+Switch iKonferenz_Webradio_Radio_Regenbogen "Radio Regenbogen Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+Switch iKonferenz_Webradio_Antenne1 "Antenne 1 Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+Switch iKonferenz_Webradio_DASDING "DASDING Konferenzraum [%s]" <radio> (iKonferenz_Webradio, gWebradio) ["Switch"]
+
+Group iKueche_Sonos_Lautsprecher "Sonos Küche" <soundvolume> (gKueche) ["Speaker"]
+Player iKueche_Sonos_Lautsprecher_Steuerung "Wiedergabe Küche" <player> (iKueche_Sonos_Lautsprecher) ["Control", "MediaControl"]
+Dimmer iKueche_Sonos_Lautsprecher_Lautstaerke "Lautstärke Küche [%d %%]" <soundvolume> (iKueche_Sonos_Lautsprecher, gLautstaerke, gDimmbar) ["Control", "SoundVolume"]
+Group iKueche_Webradio "Webradio Küche" <radio> (iKueche_Sonos_Lautsprecher)
+Switch iKueche_Webradio_SWR3 "SWR3 Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+Switch iKueche_Webradio_bigFM_BW "bigFM BW Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+Switch iKueche_Webradio_Energy_Stuttgart "Energy Stuttgart Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+Switch iKueche_Webradio_Radio_Regenbogen "Radio Regenbogen Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+Switch iKueche_Webradio_Antenne1 "Antenne 1 Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+Switch iKueche_Webradio_DASDING "DASDING Küche [%s]" <radio> (iKueche_Webradio, gWebradio) ["Switch"]
+
+Group iBad_Sonos_Lautsprecher "Sonos Bad" <soundvolume> (gBad) ["Speaker"]
+Player iBad_Sonos_Lautsprecher_Steuerung "Wiedergabe Bad" <player> (iBad_Sonos_Lautsprecher) ["Control", "MediaControl"]
+Dimmer iBad_Sonos_Lautsprecher_Lautstaerke "Lautstärke Bad [%d %%]" <soundvolume> (iBad_Sonos_Lautsprecher, gLautstaerke, gDimmbar) ["Control", "SoundVolume"]
+Group iBad_Webradio "Webradio Bad" <radio> (iBad_Sonos_Lautsprecher)
+Switch iBad_Webradio_SWR3 "SWR3 Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+Switch iBad_Webradio_bigFM_BW "bigFM BW Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+Switch iBad_Webradio_Energy_Stuttgart "Energy Stuttgart Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+Switch iBad_Webradio_Radio_Regenbogen "Radio Regenbogen Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+Switch iBad_Webradio_Antenne1 "Antenne 1 Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+Switch iBad_Webradio_DASDING "DASDING Bad [%s]" <radio> (iBad_Webradio, gWebradio) ["Switch"]
+
+Group iIoT_Sonos_Lautsprecher "Sonos IoT-Labor" <soundvolume> (gIoT) ["Speaker"]
+Player iIoT_Sonos_Lautsprecher_Steuerung "Wiedergabe IoT-Labor" <player> (iIoT_Sonos_Lautsprecher) ["Control", "MediaControl"]
+Dimmer iIoT_Sonos_Lautsprecher_Lautstaerke "Lautstärke IoT-Labor [%d %%]" <soundvolume> (iIoT_Sonos_Lautsprecher, gLautstaerke, gDimmbar) ["Control", "SoundVolume"]
+Group iIoT_Webradio "Webradio IoT-Labor" <radio> (iIoT_Sonos_Lautsprecher)
+Switch iIoT_Webradio_SWR3 "SWR3 IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+Switch iIoT_Webradio_bigFM_BW "bigFM BW IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+Switch iIoT_Webradio_Energy_Stuttgart "Energy Stuttgart IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+Switch iIoT_Webradio_Radio_Regenbogen "Radio Regenbogen IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+Switch iIoT_Webradio_Antenne1 "Antenne 1 IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+Switch iIoT_Webradio_DASDING "DASDING IoT-Labor [%s]" <radio> (iIoT_Webradio, gWebradio) ["Switch"]
+
+Group iMultimedia_Sonos_Lautsprecher "Sonos Multimedia-Raum" <soundvolume> (gMultimedia) ["Speaker"]
+Player iMultimedia_Sonos_Lautsprecher_Steuerung "Wiedergabe Multimedia-Raum" <player> (iMultimedia_Sonos_Lautsprecher) ["Control", "MediaControl"]
+Dimmer iMultimedia_Sonos_Lautsprecher_Lautstaerke "Lautstärke Multimedia-Raum [%d %%]" <soundvolume> (iMultimedia_Sonos_Lautsprecher, gLautstaerke, gDimmbar) ["Control", "SoundVolume"]
+Group iMultimedia_Webradio "Webradio Multimedia-Raum" <radio> (iMultimedia_Sonos_Lautsprecher)
+Switch iMultimedia_Webradio_SWR3 "SWR3 Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]
+Switch iMultimedia_Webradio_bigFM_BW "bigFM BW Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]
+Switch iMultimedia_Webradio_Energy_Stuttgart "Energy Stuttgart Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]
+Switch iMultimedia_Webradio_Radio_Regenbogen "Radio Regenbogen Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]
+Switch iMultimedia_Webradio_Antenne1 "Antenne 1 Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]
+Switch iMultimedia_Webradio_DASDING "DASDING Multimedia-Raum [%s]" <radio> (iMultimedia_Webradio, gWebradio) ["Switch"]

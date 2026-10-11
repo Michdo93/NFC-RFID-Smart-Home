@@ -1,0 +1,66 @@
+# Kapitel 31 – das Laborprofil: vier Leser, fünf Kartenarten
+name: "Labor"
+
+readers:
+  nachttisch: {raum: iSmartHome}
+  kueche:     {raum: iKueche}
+  flur:       {raum: iIoT}
+  multimedia: {raum: iMultimedia}
+
+actions:
+  # --- Szenenkarten (Rolle „szene“) – wirken an jedem Leser ------------------
+  "gute_nacht:present":
+    - {command: gLichter, value: "OFF"}
+    - {command: gRollladen, value: DOWN}
+    - {command: iSzene_Gute_Nacht, value: "ON"}
+  "kinoabend:present":
+    - {command: iMultimedia_Hue_Lampen_Helligkeit, value: "20"}
+    - {command: iMultimedia_Somfy_Rollladen_Steuerung, value: DOWN}
+    - {command: iMultimedia_Beamer_Power, value: "ON"}
+    - {command: iSzene_Kinoabend, value: "ON"}
+
+reader_actions:
+  # --- Küche und Multimedia-Raum: Medienkarten (Rolle „medien“) wie eine Toniebox
+  #     Der Sender steht im Kartenregister („wert“). Am Nachttisch gibt es kein Radio –
+  #     die Profilprüfung (Kapitel 30) hat genau das gefunden.
+  kueche:
+    "#medien:present": {command: "{raum}_Webradio_{wert}", value: "ON"}
+    "#medien:removed": {command: "{raum}_Webradio_{wert}", value: "OFF"}
+  multimedia:
+    "#medien:present": {command: "{raum}_Webradio_{wert}", value: "ON"}
+    "#medien:removed": {command: "{raum}_Webradio_{wert}", value: "OFF"}
+
+  # --- Nachttisch: Bewohnerkarte antippen = Licht, liegen lassen = Präsenz -----
+  nachttisch:
+    "#bewohner:tap": {toggle: "{raum}_Hue_Lampen_Schalter"}
+    "*:present":     {update: iNachttisch_Karte_Liegt, value: "ON"}
+    "*:removed":     {update: iNachttisch_Karte_Liegt, value: "OFF"}
+
+  # --- Flur: Zutritt, Anmelden und Abmelden ----------------------------------
+  flur:
+    "#bewohner:present":
+      - {command: iLabor_Tuer_Oeffner, value: "ON"}
+      - {update: iLabor_Zutritt_Letzter, value: "{label}"}
+      - {increment: iLabor_Zutritte}
+    "#bewohner:tap":   {update: "iAnwesend_{wert}", value: "ON"}       # kurz: angemeldet
+    "#bewohner:hold":  [{update: "iAnwesend_{wert}", value: "OFF"},    # 1,5 s: abgemeldet
+                        {feedback: signal, value: learn}]
+    "#gast:present":
+      - {command: iLabor_Tuer_Oeffner, value: "ON"}
+      - {update: iAnwesend_Gast, value: "ON"}
+      - {update: iLabor_Zutritt_Letzter, value: "Gast: {label}"}
+      - {increment: iLabor_Zutritte}
+    "#admin:hold":     {toggle: iSmartHome_Alarmanlage_Scharf}
+    "unknown:present": {update: iLabor_Zutritt_Letzter, value: "unbekannte Karte"}
+    "clone:present":   {command: iSmartHome_Alarm, value: "ON"}
+    "invalid:present": {update: iLabor_Zutritt_Letzter, value: "ungültige Karte – prüfen/erneuern"}
+
+# --- Rückkanal (Kapitel 27): Zustände aus openHAB als Signale an den Lesern ------
+watch:
+  iSmartHome_Alarm:
+    "ON": {leser: "*", signal: alarm}
+  iSmartHome_Alarmanlage_Scharf:
+    "ON":  {leser: flur, signal: deny}
+    "OFF": {leser: flur, signal: ok}
+  iSmartHome_Klingel:
+    "ON": {leser: nachttisch, signal: learn}       # blinkt ohne Ton – nachts angenehmer

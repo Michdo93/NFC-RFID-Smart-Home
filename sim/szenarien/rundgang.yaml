@@ -1,0 +1,14 @@
+# Kapitel 21 – ein Rundgang durch das Labor (vorher Karten anlernen, siehe Kapitel 12)
+#   python3 31-labor-szenarien/labor_karten_anlernen.py --sim
+leser: nachttisch
+schritte:
+  - {nach: 0.5, karte: s50_karte_1}                      # Michael: antippen -> Licht
+  - {nach: 0.5, entfernen: true}
+  - {nach: 1.0, karte: s50_karte_2}                      # Gute-Nacht-Karte, liegen lassen
+  - {nach: 2.0, entfernen: true}
+  - {nach: 0.5, karte: ntag215_karte_1, leser: kueche}   # Medienkarte SWR3 in der Küche
+  - {nach: 2.0, entfernen: true, leser: kueche}
+  - {nach: 0.5, karte: ntag213_sticker, leser: flur}     # unbekannter Sticker
+  - {nach: 0.5, entfernen: true, leser: flur}
+  - {nach: 0.5, karte: ntag216_armband, leser: flur}     # Gast mit Armband
+  - {nach: 0.5, entfernen: true, leser: flur}

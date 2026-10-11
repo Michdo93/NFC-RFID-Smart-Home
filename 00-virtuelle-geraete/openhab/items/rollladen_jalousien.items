@@ -1,0 +1,16 @@
+// ============================================================================
+// Rollladen und Jalousie im Smart-Home-Raum (virtuell)
+//   Rollershutter: UP / DOWN / STOP oder 0..100 %  (0 = offen, 100 = zu)
+//   Jalousie zusätzlich mit Lamellenwinkel (Dimmer 0..100 %)
+// Echte Hardware: somfytahoma (Rollladen), homematic (Jalousie).
+// ============================================================================
+
+Group iSmartHome_Somfy_Rollladen "Rollladen Smart Home" <rollershutter> (gSmartHome) ["Blinds"]
+Rollershutter iSmartHome_Somfy_Rollladen_Steuerung "Rollladen Smart Home [%d %%]" <rollershutter> (iSmartHome_Somfy_Rollladen, gRollladen) ["Control", "Opening"]
+
+Group iSmartHome_Jalousie "Jalousie Smart Home" <blinds> (gSmartHome) ["Blinds"]
+Rollershutter iSmartHome_Jalousie_Steuerung "Jalousie Smart Home [%d %%]" <blinds> (iSmartHome_Jalousie, gJalousien) ["Control", "Opening"]
+Dimmer iSmartHome_Jalousie_Lamelle "Lamellen Smart Home [%d %%]" <blinds> (iSmartHome_Jalousie, gDimmbar) ["Control", "Tilt"]
+
+Group iMultimedia_Somfy_Rollladen "Rollladen Multimedia" <rollershutter> (gMultimedia) ["Blinds"]
+Rollershutter iMultimedia_Somfy_Rollladen_Steuerung "Rollladen Multimedia [%d %%]" <rollershutter> (iMultimedia_Somfy_Rollladen, gRollladen) ["Control", "Opening"]

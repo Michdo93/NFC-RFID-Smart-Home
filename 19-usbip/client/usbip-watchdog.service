@@ -1,0 +1,8 @@
+# Gemeinsame USB/IP-Konfiguration der Reihe „Smart Home & …“ (Leap Motion, Gamepads, Kinect, NFC/RFID)
+# Datei: /etc/systemd/system/usbip-watchdog.service
+[Unit]
+Description=USB/IP Client Watchdog Service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/usbip-watchdog.sh

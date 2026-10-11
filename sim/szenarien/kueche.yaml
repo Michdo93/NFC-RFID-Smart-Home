@@ -1,0 +1,9 @@
+# Kapitel 26 – drei Karten am Küchen-Leser (Profil 26-kartenaktionen/profile/erste_karten.yaml)
+leser: kueche
+schritte:
+  - {nach: 0.5, karte: s50_karte_1}          # Michael antippen -> Licht Küche um
+  - {nach: 0.4, entfernen: true}
+  - {nach: 1.0, karte: ntag215_karte_1}      # SWR3 auflegen ...
+  - {nach: 3.0, entfernen: true}             # ... und wieder weg
+  - {nach: 1.0, karte: s50_karte_2}          # Gute Nacht
+  - {nach: 0.5, entfernen: true}

@@ -1,0 +1,22 @@
+# Gemeinsame USB/IP-Konfiguration der Reihe „Smart Home & …“ (Leap Motion, Gamepads, Kinect, NFC/RFID)
+# USB-Anschluss freigeben, Instanz = Bus-ID (z. B. 1-1.2)
+# Datei: /etc/systemd/system/usbip-server-bind@.service
+#   sudo systemctl enable --now usbip-server-bind@1-1.2.service
+[Unit]
+Description=USB/IP Server Bind for Bus ID %i
+After=local-fs.target sysinit.target network-online.target usbipd.service
+Requires=usbipd.service
+RequiresMountsFor=/sys
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/sbin/modprobe usbip_host
+ExecStart=/usr/sbin/usbip bind -b %i
+ExecStop=/usr/sbin/usbip unbind -b %i
+RemainAfterExit=yes
+# Gerät beim Booten noch nicht da? Alle 5 s erneut versuchen
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

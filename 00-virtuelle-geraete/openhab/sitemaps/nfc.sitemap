@@ -1,0 +1,45 @@
+// Kapitel 22 – Test-Sitemap für das NFC-System
+// Datei: $OPENHAB_CONF/sitemaps/nfc.sitemap   ->  BasicUI: /basicui/app?sitemap=nfc
+sitemap nfc label="Smart Home & NFC" {
+    Frame label="Leser (Kapitel 22)" {
+        Text item=NFC_Gateway_Status
+        Text item=NFC_Nachttisch_Karte
+        Text item=NFC_Nachttisch_Zuletzt
+        Text item=NFC_Nachttisch_Status valuecolor=[=="clone"="red", =="invalid"="red", =="accepted"="green"]
+        Text item=NFC_Kueche_Zuletzt
+        Text item=NFC_Flur_Zuletzt
+        Text item=NFC_Flur_Status valuecolor=[=="clone"="red", =="invalid"="red", =="accepted"="green"]
+        Text item=NFC_Multimedia_Zuletzt
+        Switch item=NFC_Flur_Signal mappings=[ok="OK", deny="Nein", alarm="Alarm", learn="Anlernen"]
+    }
+    Frame label="Szenen und Präsenz (Kapitel 23, 31)" {
+        Switch item=iSzene_Gute_Nacht
+        Switch item=iSzene_Kinoabend
+        Switch item=iNachttisch_Karte_Liegt
+        Text   item=gAnwesend
+        Switch item=iAnwesend_Michael
+        Switch item=iAnwesend_Gast
+    }
+    Frame label="Zutritt (Kapitel 31)" {
+        Switch item=iLabor_Tuer_Oeffner
+        Text   item=iLabor_Zutritt_Letzter
+        Text   item=iLabor_Zutritte
+        Switch item=iSmartHome_Alarmanlage_Scharf
+        Switch item=iSmartHome_Alarm
+    }
+    Frame label="Karten anlernen und sperren (Kapitel 24)" {
+        Input     item=NFC_Anlernen_Name
+        Selection item=NFC_Anlernen_Rolle mappings=[bewohner="Bewohner", gast="Gast", szene="Szene", medien="Medien", admin="Admin"]
+        Selection item=NFC_Anlernen_Leser mappings=[nachttisch="Nachttisch (ACR122U)"]
+        Switch    item=NFC_Anlernen_Start mappings=[ON="Jetzt anlernen"]
+        Input     item=NFC_Sperren_Name
+        Switch    item=NFC_Sperren_Start mappings=[ON="Sperren", OFF="Entsperren"]
+    }
+    Frame label="Lichter und Radio" {
+        Switch item=iSmartHome_Hue_Lampen_Schalter
+        Switch item=iKueche_Webradio_SWR3
+        Switch item=iKueche_Webradio_DASDING
+        Text   item=gLichter
+        Text   item=gRollladen
+    }
+}

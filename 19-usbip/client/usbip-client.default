@@ -1,0 +1,6 @@
+# Gemeinsame USB/IP-Konfiguration der Reihe „Smart Home & …“ (Leap Motion, Gamepads, Kinect, NFC/RFID)
+# Datei: /etc/default/usbip-client  (von setup_client.sh angelegt)
+USBIP_SERVER=192.168.0.231
+USBIP_BUSIDS="1-1.2"
+# mehrere Server (z. B. je ein Pi Zero mit ACR122U an Flur und Haustür):
+# USBIP_BUSIDS="1-1.2 192.168.0.232:1-1.2"

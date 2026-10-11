@@ -1,0 +1,12 @@
+# Installation im venv (Kapitel 5):
+#   python3 -m venv .venv
+#   source .venv/bin/activate
+#   pip install -r requirements.txt
+#   pip install -e .
+
+pyyaml>=6.0
+pyscard>=2.0          # ACR122U über pcscd – braucht swig und libpcsclite-dev (Kapitel 5)
+paho-mqtt>=2.0        # Ansatz A – Teil VI
+aiohttp>=3.9
+flask>=3             # Mini-openHAB (Kapitel 25) und Tag-Dienst (Kapitel 29)
+python-openhab-rest-client @ git+https://github.com/Michdo93/python-openhab-rest-client.git

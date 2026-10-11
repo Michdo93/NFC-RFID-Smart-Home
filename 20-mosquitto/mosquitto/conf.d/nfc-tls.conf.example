@@ -1,0 +1,11 @@
+# Kapitel 20 – TLS für Mosquitto. Kopieren nach /etc/mosquitto/conf.d/nfc-tls.conf
+# Zertifikate: sudo bash 20-mosquitto/zertifikate_erzeugen.sh <hostname> <ip>
+#
+# Dieser Listener ERGÄNZT den aus nfc.conf. Wer nur noch TLS will, ersetzt in nfc.conf
+# „listener 1883“ durch „listener 1883 127.0.0.1“ (unverschlüsselt nur noch lokal).
+# Mit per_listener_settings false (Vorgabe) gelten Passwörter und ACL für beide.
+listener 8883
+certfile /etc/mosquitto/certs/server.crt
+keyfile  /etc/mosquitto/certs/server.key
+cafile   /etc/mosquitto/certs/ca.crt
+tls_version tlsv1.2

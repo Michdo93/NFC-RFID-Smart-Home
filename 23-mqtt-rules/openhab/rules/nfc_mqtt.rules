@@ -1,0 +1,102 @@
+// ============================================================================
+// Kapitel 23 – Ansatz A: Was eine Karte bewirkt, entscheiden openHAB-Regeln (Rules DSL)
+// Datei: $OPENHAB_CONF/rules/nfc_mqtt.rules
+// Nur EINE Sprachvariante (DSL, JS oder Python) gleichzeitig aktivieren!
+//
+// Das Gateway hat jede Karte bereits geprüft. Hier kommen nur angenommene Karten an:
+//   Kanal gesture  {"card":"michael","role":"bewohner","value":"Michael",
+//                   "gesture":"tap","reader":"flur","duration":0.4}
+// JSONPATH braucht das Add-on „JSONPath Transformation“.
+// ============================================================================
+
+val RAUM = newHashMap("nachttisch" -> "iSmartHome", "kueche" -> "iKueche",
+                      "flur" -> "iIoT", "multimedia" -> "iMultimedia")
+
+rule "NFC: Gesten aller Leser"
+when
+    Channel "mqtt:topic:mosquitto:nfc_nachttisch:gesture" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_kueche:gesture" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_flur:gesture" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_multimedia:gesture" triggered
+then
+    val json   = receivedEvent
+    val karte  = transform("JSONPATH", "$.card", json)
+    val rolle  = transform("JSONPATH", "$.role", json)
+    val wert   = transform("JSONPATH", "$.value", json)
+    val geste  = transform("JSONPATH", "$.gesture", json)
+    val leser  = transform("JSONPATH", "$.reader", json)
+    val raum   = RAUM.get(leser)
+
+    // --- Szenenkarten: an jedem Leser ------------------------------------------
+    if (karte == "gute_nacht" && geste == "present") {
+        gLichter.sendCommand(OFF)
+        gRollladen.sendCommand(DOWN)
+        iSzene_Gute_Nacht.sendCommand(ON)
+    }
+    if (karte == "kinoabend" && geste == "present") {
+        iMultimedia_Hue_Lampen_Helligkeit.sendCommand(20)
+        iMultimedia_Somfy_Rollladen_Steuerung.sendCommand(DOWN)
+        iMultimedia_Beamer_Power.sendCommand(ON)
+        iSzene_Kinoabend.sendCommand(ON)
+    }
+
+    // --- Medienkarten in Küche und Multimedia-Raum: wie eine Toniebox ---------------
+    if (rolle == "medien" && (leser == "kueche" || leser == "multimedia")) {
+        val radio = raum + "_Webradio_" + wert
+        if (geste == "present") sendCommand(radio, "ON")
+        if (geste == "removed") sendCommand(radio, "OFF")
+    }
+
+    // --- Nachttisch: Bewohnerkarte antippen = Licht ------------------------------
+    if (leser == "nachttisch" && rolle == "bewohner" && geste == "tap") {
+        val licht = raum + "_Hue_Lampen_Schalter"
+        sendCommand(licht, if (getItemState(licht) == ON) "OFF" else "ON")
+    }
+
+    // --- Flur: Zutritt, Anmelden (antippen), Abmelden (liegen lassen) ---------------
+    if (leser == "flur") {
+        val label = transform("JSONPATH", "$.label", json)
+        if ((rolle == "bewohner" || rolle == "gast") && geste == "present") {
+            iLabor_Tuer_Oeffner.sendCommand(ON)                 // expire schaltet wieder aus
+            iLabor_Zutritt_Letzter.postUpdate(if (rolle == "gast") "Gast: " + label else label)
+            val n = if (iLabor_Zutritte.state instanceof Number) (iLabor_Zutritte.state as Number).intValue else 0
+            iLabor_Zutritte.postUpdate(n + 1)
+            if (rolle == "gast") iAnwesend_Gast.postUpdate(ON)
+        }
+        if (rolle == "bewohner" && geste == "tap")  postUpdate("iAnwesend_" + wert, "ON")
+        if (rolle == "bewohner" && geste == "hold") {
+            postUpdate("iAnwesend_" + wert, "OFF")
+            NFC_Flur_Signal.sendCommand("learn")                 // „abgemeldet“ sichtbar machen
+        }
+        if (rolle == "admin" && geste == "hold")
+            iSmartHome_Alarmanlage_Scharf.sendCommand(if (iSmartHome_Alarmanlage_Scharf.state == ON) OFF else ON)
+    }
+end
+
+rule "NFC: Karte auf dem Nachttisch"
+when
+    Item NFC_Nachttisch_Karte changed
+then
+    iNachttisch_Karte_Liegt.postUpdate(if (newState.toString == "NONE") OFF else ON)
+end
+
+rule "NFC: Sicherheitsereignisse"
+when
+    Channel "mqtt:topic:mosquitto:nfc_nachttisch:security" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_kueche:security" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_flur:security" triggered or
+    Channel "mqtt:topic:mosquitto:nfc_multimedia:security" triggered
+then
+    val status = transform("JSONPATH", "$.status", receivedEvent)
+    logWarn("nfc", "Sicherheitsereignis: " + receivedEvent)
+    if (status == "clone") {                       // Kopie im Umlauf: Alarm
+        iSmartHome_Alarm.sendCommand(ON)
+    }
+    // invalid: manipuliert ODER Schreibvorgang abgerissen (Kapitel 13) – melden, kein Alarm
+    if (status == "invalid") {
+        iLabor_Zutritt_Letzter.postUpdate("ungültige Karte – prüfen/erneuern")
+    }
+    if (status == "unknown") {
+        iLabor_Zutritt_Letzter.postUpdate("unbekannte Karte")
+    }
+end

@@ -1,0 +1,47 @@
+# Kapitel 17 – Der Flur-Leser mit ESPHome statt eigener Firmware
+#
+#   cp secrets.example.yaml secrets.yaml      (gitignored) und ausfüllen
+#   esphome run nfc-flur.yaml
+#
+# ESPHome liefert nur die UID – keine NFH-Nutzdaten, kein Schreiben. Das Gateway
+# behandelt diesen Leser deshalb mit Stufe „uid“ (config.yaml: level: uid).
+# Gut für unkritische Aktionen (Licht, Musik), nicht für Zutritt.
+esphome:
+  name: nfc-flur
+
+esp32:
+  board: esp32dev
+
+logger:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+mqtt:
+  broker: !secret mqtt_host
+  username: flur-esphome           # = Leser-Name (Zugriffsliste mit %u)
+  password: !secret mqtt_password
+  topic_prefix: nfc/flur-esphome/esphome
+  discovery: false
+  log_topic: null                  # keine Logs über MQTT (die ACL ließe sie nicht durch)
+  birth_message: {topic: nfc/flur-esphome/status, payload: online, retain: true}
+  will_message:  {topic: nfc/flur-esphome/status, payload: offline, retain: true}
+
+i2c:
+  sda: 21
+  scl: 22
+
+# PN532 über I2C. Für den RC522 stattdessen:  spi: … und  rc522_spi: {cs_pin: 5, …}
+pn532_i2c:
+  update_interval: 250ms
+  on_tag:
+    then:
+      - mqtt.publish:
+          topic: nfc/raw/flur-esphome
+          payload: !lambda 'return "{\"uid\":\"" + x + "\",\"type\":\"unbekannt\"}";'
+  on_tag_removed:
+    then:
+      - mqtt.publish:
+          topic: nfc/raw/flur-esphome
+          payload: '{"removed":true}'

@@ -1,0 +1,30 @@
+# Kapitel 21 – das NFC-Gateway als Dienst
+#   sudo cp 21-nfc-gateway/nfc-gateway.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now nfc-gateway
+[Unit]
+Description=NFC-Gateway (Kapitel 21)
+After=network-online.target pcscd.socket
+Wants=network-online.target
+# Nur EIN Programm führt das Kartenregister (Kapitel 18)
+Conflicts=nfc-fernbedienung.service
+
+[Service]
+Type=simple
+User=nfc
+Group=nfc
+WorkingDirectory=/opt/NFC-RFID-Smart-Home
+Environment=NFC_CONFIG=/opt/NFC-RFID-Smart-Home/config/config.yaml
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/NFC-RFID-Smart-Home/.venv/bin/python3 21-nfc-gateway/nfc_gateway.py
+Restart=always
+RestartSec=5
+
+# Härtung: nur das Kartenregister (data/) ist beschreibbar
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/opt/NFC-RFID-Smart-Home/data
+
+[Install]
+WantedBy=multi-user.target

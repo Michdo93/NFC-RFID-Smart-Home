@@ -1,0 +1,10 @@
+# Kapitel 24 – Anlernen über openHAB: Während das Gateway läuft, schickt openHAB
+#   nfc/gateway/learn {"name": "gast_tom", "role": "gast", "leser": "nachttisch"}
+# Danach liegt der leere Sticker am Nachttisch auf und wird angelernt; beim zweiten
+# Auflegen ist er eine normale Karte.
+leser: nachttisch
+schritte:
+  - {nach: 3.0, karte: ntag213_sticker}
+  - {nach: 1.0, entfernen: true}
+  - {nach: 1.0, karte: ntag213_sticker}
+  - {nach: 0.5, entfernen: true}

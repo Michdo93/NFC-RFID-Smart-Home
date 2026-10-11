@@ -1,0 +1,13 @@
+# Kapitel 29 – HTTPS vor dem Tag-Dienst mit Caddy (https://caddyserver.com)
+#   sudo apt install caddy
+#   sudo cp 29-signierte-urls/Caddyfile.example /etc/caddy/Caddyfile && sudo systemctl reload caddy
+#
+# „tls internal“: Caddy stellt das Zertifikat mit seiner eigenen lokalen CA aus. Deren
+# Stammzertifikat (/var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt)
+# muss auf jedem Smartphone als vertrauenswürdig installiert werden – sonst zeigt der
+# Browser beim Antippen eines Tags eine Zertifikatswarnung.
+# Mit einer eigenen Domain geht es ohne: Zertifikat von Let's Encrypt per DNS-Challenge.
+home.local:8443 {
+    tls internal
+    reverse_proxy 127.0.0.1:8088
+}

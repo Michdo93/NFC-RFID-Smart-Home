@@ -1,0 +1,22 @@
+# Kapitel 29 – Aktionen des Tag-Dienstes
+# Die URL auf dem Tag nennt nur Tag-ID und Aktionsnamen. WAS passiert, steht hier –
+# auf dem Server, nicht auf dem Tag.
+aktionen:
+  licht_kueche:
+    label: "Licht Küche"
+    ops: [{toggle: iKueche_Hue_Lampen_Schalter}]
+  radio_kueche:
+    label: "SWR3 in der Küche"
+    ops: [{toggle: iKueche_Webradio_SWR3}]
+  gute_nacht:
+    label: "Gute Nacht"
+    ops:
+      - {command: gLichter, value: "OFF"}
+      - {command: gRollladen, value: DOWN}
+  tuer_labor:
+    label: "Labortür öffnen"
+    bestaetigen: true            # Folgenreiches: erst nach einem zweiten Tippen
+    ops: [{command: iLabor_Tuer_Oeffner, value: "ON"}]
+
+# Tags, die nicht mehr gelten (verloren, abgerissen, ersetzt)
+gesperrte_tags: []

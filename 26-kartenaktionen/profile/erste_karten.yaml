@@ -1,0 +1,23 @@
+# Kapitel 26 – das erste Kartenprofil: drei Karten, ein Leser
+name: "Erste Karten in der Küche"
+
+readers:
+  kueche: {raum: iKueche}
+
+actions:
+  # Michaels Karte antippen: Licht im Raum des Lesers umschalten
+  "michael:tap":  {toggle: "{raum}_Hue_Lampen_Schalter"}
+  # liegen lassen: alles aus, Rollläden zu
+  "michael:hold":
+    - {command: gLichter, value: "OFF"}
+    - {command: gRollladen, value: DOWN}
+
+  # die Gute-Nacht-Karte (Rolle „szene“)
+  "gute_nacht:present":
+    - {command: gLichter, value: "OFF"}
+    - {command: gRollladen, value: DOWN}
+    - {command: iSzene_Gute_Nacht, value: "ON"}
+
+  # jede Medienkarte: Sender aus dem Kartenregister („wert“) im Raum des Lesers
+  "#medien:present": {command: "{raum}_Webradio_{wert}", value: "ON"}
+  "#medien:removed": {command: "{raum}_Webradio_{wert}", value: "OFF"}

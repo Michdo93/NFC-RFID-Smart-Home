@@ -1,0 +1,32 @@
+# Kapitel 32 – die NFC-Fernbedienung (Ansatz B oder Hybrid) als Dienst
+#   sudo cp 32-gesamtsystem/nfc-fernbedienung.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now nfc-fernbedienung
+[Unit]
+Description=NFC-Fernbedienung (Kapitel 26, 32)
+After=network-online.target pcscd.socket
+Wants=network-online.target
+# Nur EIN Programm führt das Kartenregister (Kapitel 18)
+Conflicts=nfc-gateway.service
+
+[Service]
+Type=simple
+User=nfc
+Group=nfc
+WorkingDirectory=/opt/NFC-RFID-Smart-Home
+Environment=NFC_CONFIG=/opt/NFC-RFID-Smart-Home/config/config.yaml
+Environment=PYTHONUNBUFFERED=1
+# Profil vor dem Start gegen openHAB prüfen (Kapitel 30) – ein Fehler verhindert den Start
+ExecStartPre=/opt/NFC-RFID-Smart-Home/.venv/bin/python3 30-kartenarten-items/profil_pruefen.py
+ExecStart=/opt/NFC-RFID-Smart-Home/.venv/bin/python3 26-kartenaktionen/nfc_fernbedienung.py --mqtt --esp32
+Restart=always
+RestartSec=15
+
+# Härtung: nur das Kartenregister (data/) ist beschreibbar
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/opt/NFC-RFID-Smart-Home/data
+
+[Install]
+WantedBy=multi-user.target

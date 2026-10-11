@@ -1,0 +1,8 @@
+// Kapitel 24 – Karten aus openHAB heraus anlernen und sperren
+// Datei: $OPENHAB_CONF/items/nfc_anlernen.items
+String NFC_Anlernen_Name  "Name der neuen Karte [%s]" <settings>
+String NFC_Anlernen_Rolle "Rolle [%s]"                <settings>
+String NFC_Anlernen_Leser "Leser [%s]"                <settings>
+Switch NFC_Anlernen_Start "Anlernen"                  <settings> { autoupdate="false" }
+String NFC_Sperren_Name   "Karte [%s]"                <lock>
+Switch NFC_Sperren_Start  "Sperren/Entsperren"        <lock>     { autoupdate="false" }

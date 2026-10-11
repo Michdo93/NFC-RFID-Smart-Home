@@ -1,0 +1,22 @@
+# Gemeinsame USB/IP-Konfiguration der Reihe „Smart Home & …“ (Leap Motion, Gamepads, Kinect, NFC/RFID)
+# Client = Rechner, der das Gerät benutzt (z. B. openHAB-VM). Instanz = [Server:]Bus-ID.
+# Datei: /etc/systemd/system/usbip-client@.service
+# Server-Adresse in /etc/default/usbip-client:  USBIP_SERVER=192.168.0.231
+[Unit]
+Description=USB/IP Client Attach/Detach Service for %i
+After=network-online.target
+Wants=network-online.target
+Before=shutdown.target reboot.target halt.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/default/usbip-client
+ExecStartPre=/usr/sbin/modprobe vhci-hcd
+ExecStart=/usr/local/sbin/usbip-attach.sh %i
+ExecStop=/usr/local/sbin/usbip-detach.sh %i
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=15s
+
+[Install]
+WantedBy=multi-user.target

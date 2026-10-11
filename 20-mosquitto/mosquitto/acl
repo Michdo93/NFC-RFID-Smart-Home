@@ -1,0 +1,42 @@
+# Kapitel 20 – Zugriffsrechte (Datei: /etc/mosquitto/acl)
+
+# ESP32-Leser: MQTT-Benutzer = Name des Lesers (z. B. „flur“). %u setzt ihn ein.
+# Jeder Leser darf nur seine eigenen Topics schreiben und nur seine Befehle lesen.
+pattern write nfc/raw/%u
+pattern write nfc/%u/status
+pattern write nfc/%u/cmd/result
+pattern read  nfc/%u/cmd
+pattern read  nfc/%u/set/signal
+
+# Das Gateway liest Rohdaten und Befehle aus openHAB, schreibt geprüfte Ereignisse
+# und Schreibbefehle an die Leser.
+user nfc-gateway
+topic read  nfc/raw/#
+topic read  nfc/+/status
+topic read  nfc/+/cmd/result
+topic read  nfc/+/set/signal
+topic read  nfc/gateway/learn
+topic read  nfc/gateway/block
+topic read  nfc/gateway/unblock
+topic write nfc/gateway/status
+topic write nfc/+/event
+topic write nfc/+/gesture
+topic write nfc/+/card
+topic write nfc/+/last
+topic write nfc/+/security
+topic write nfc/+/cmd
+topic write nfc/+/set/signal
+
+# openHAB sieht nur GEPRÜFTE Ereignisse – keine Rohdaten mit UIDs, keine Schlüssel.
+user openhab
+topic read  nfc/gateway/status
+topic read  nfc/+/status
+topic read  nfc/+/event
+topic read  nfc/+/gesture
+topic read  nfc/+/card
+topic read  nfc/+/last
+topic read  nfc/+/security
+topic write nfc/+/set/signal
+topic write nfc/gateway/learn
+topic write nfc/gateway/block
+topic write nfc/gateway/unblock

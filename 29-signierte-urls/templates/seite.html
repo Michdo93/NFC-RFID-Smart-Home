@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ titel }}</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 26rem; margin: 2rem auto; padding: 0 1rem; }
+  .ok { color: #1a7f37; } .fehler { color: #b42318; }
+  button, input { font-size: 1.1rem; padding: .6rem; width: 100%; margin-top: .6rem; box-sizing: border-box; }
+</style>
+</head>
+<body>
+<h1 class="{{ klasse }}">{{ titel }}</h1>
+<p>{{ text }}</p>
+{% if formular == "bestaetigen" %}
+<form method="post">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="hidden" name="s" value="{{ sig }}">
+  <button type="submit">{{ knopf }}</button>
+</form>
+{% elif formular == "anmelden" %}
+<form method="post" action="{{ url_for('anmelden', weiter=weiter) }}">
+  <input name="benutzer" placeholder="Benutzer" autocomplete="username">
+  <input name="passwort" type="password" placeholder="Passwort" autocomplete="current-password">
+  <button type="submit">Anmelden und Gerät merken</button>
+</form>
+{% endif %}
+</body>
+</html>

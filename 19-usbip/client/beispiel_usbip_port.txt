@@ -1,0 +1,10 @@
+Imported USB devices
+====================
+Port 00: <Port in Use> at Full Speed(12Mbps)
+       Advanced Card Systems, Ltd : ACR122U PICC Interface (072f:2200)
+       3-1 -> usbip://192.168.0.231:3240/1-1.2
+           -> remote bus/dev 001/004
+Port 01: <Port in Use> at Full Speed(12Mbps)
+       Advanced Card Systems, Ltd : ACR122U PICC Interface (072f:2200)
+       3-2 -> usbip://192.168.0.232:3240/1-1.2
+           -> remote bus/dev 001/007

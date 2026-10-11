@@ -1,0 +1,54 @@
+# ----------------------------------------------------------------------------
+# Vorlage für die lokale Konfiguration.
+#
+#   cp config/config.example.yaml config/config.yaml
+#
+# config/config.yaml, config/secret.key und data/ stehen in .gitignore und
+# werden NIE eingecheckt.
+# ----------------------------------------------------------------------------
+
+# --- Sicherheit (Teil III) -----------------------------------------------------
+security:
+  level: rolling                     # uid | signed | rolling (Kapitel 11)
+  secret_file: config/secret.key     # Installationsgeheimnis, Rechte 600 (Kapitel 11)
+  registry: data/karten.json         # Kartenregister (Kapitel 12)
+
+# --- Leser (Kapitel 9, 16, 21) --------------------------------------------------
+# type acr122u: am Pi über pcscd/pyscard; type esp32: über MQTT (nfc/raw/<name>)
+# level und roles sind optional und überschreiben die Vorgaben je Leser.
+readers:
+  nachttisch: {type: acr122u, match: "ACR122"}
+  flur:       {type: esp32, roles: [bewohner, gast, admin]}   # PN532
+  kueche:     {type: esp32}                 # RC522
+  multimedia: {type: esp32}                 # PN532
+  # esphome: {type: esp32, level: uid}  # ESPHome liefert nur die UID (Kapitel 17)
+
+# --- Gesten (Kapitel 9) -----------------------------------------------------------
+logic:
+  hold_time: 1.5          # Sekunden bis "hold"
+  absent_time: 0.6        # so lange muss eine Karte fehlen, bis sie als entfernt gilt
+
+# --- MQTT (Ansatz A, Teil VI) -------------------------------------------------------
+mqtt:
+  host: "localhost"        # Mosquitto (Kapitel 20)
+  port: 1883
+  username: "nfc-gateway"
+  password: "CHANGE_ME"
+  base_topic: "nfc"
+  client_id: "nfc-gateway"
+  tls: false               # true: Port 8883, Zertifikat des Brokers prüfen (Kapitel 20)
+  # ca_file: /etc/mosquitto/certs/ca.crt   # eigene CA (zertifikate_erzeugen.sh)
+
+# --- openHAB (Ansatz B: REST, Teil VII) ---------------------------------------------
+openhab:
+  url: "http://openhab.local:8080"
+  token: "oh.nfc.XXXXXXXXXXXXXXXXXXXXXXXX"   # API-Token (UI -> Profil -> API-Tokens)
+  min_interval: 0.1
+
+# --- Kartenprofil für Ansatz B (Kapitel 26, 31) --------------------------------------
+profile: "31-labor-szenarien/profile/labor.yaml"
+
+# --- Tag-Dienst für Smartphones (Kapitel 29) -----------------------------------------
+phone:
+  base_url: "https://home.local:8443"
+  users_file: config/tagdienst_benutzer.json     # angemeldete Geräte – NIE einchecken

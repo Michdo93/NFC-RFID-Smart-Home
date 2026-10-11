@@ -1,0 +1,11 @@
+# Kapitel 6 und 9 – Karten auf einen Leser legen und wieder abnehmen
+leser: nachttisch
+schritte:
+  - {nach: 0.5, karte: s50_karte_1}          # auflegen ...
+  - {nach: 0.4, entfernen: true}              # ... und gleich wieder weg (antippen)
+  - {nach: 1.0, karte: ntag215_karte_1}       # auflegen und liegen lassen
+  - {nach: 2.5, entfernen: true}
+  - {nach: 0.8, karte: ntag216_armband}       # Armband kurz ans Lesefeld
+  - {nach: 0.1, entfernen: true}              # Funkkontakt kurz verloren ...
+  - {nach: 0.2, karte: ntag216_armband}       # ... und wieder da (entprellt)
+  - {nach: 0.6, entfernen: true}

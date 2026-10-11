@@ -1,0 +1,16 @@
+# Gemeinsame USB/IP-Konfiguration der Reihe „Smart Home & …“ (Leap Motion, Gamepads, Kinect, NFC/RFID)
+# Server = Rechner, an dem das USB-Gerät steckt (z. B. Raspberry Pi Zero 2 W mit dem ACR122U)
+# Datei: /etc/systemd/system/usbipd.service
+[Unit]
+Description=USB/IP Daemon
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/sbin/modprobe usbip_host
+ExecStart=/usr/sbin/usbipd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

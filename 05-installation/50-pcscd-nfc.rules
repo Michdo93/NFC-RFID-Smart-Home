@@ -1,0 +1,14 @@
+// Kapitel 5 und 21 – pcscd für die Gruppe „nfc“ freigeben (polkit)
+// Datei: /etc/polkit-1/rules.d/50-pcscd-nfc.rules
+//
+// Debian, Ubuntu und Raspberry Pi OS bauen pcscd mit polkit. Ohne diese Regel darf
+// nur eine lokal angemeldete, aktive Sitzung (Bildschirm und Tastatur am Pi) den Leser
+// verwenden – weder eine SSH-Sitzung noch ein systemd-Dienst.
+// Mitglieder der Gruppe „nfc“: Sie selbst (usermod -aG nfc pi) und der Dienstbenutzer nfc.
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.debian.pcsc-lite.access_pcsc" ||
+         action.id == "org.debian.pcsc-lite.access_card") &&
+        subject.isInGroup("nfc")) {
+        return polkit.Result.YES;
+    }
+});

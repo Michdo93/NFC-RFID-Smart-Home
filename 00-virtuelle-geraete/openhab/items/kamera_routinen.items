@@ -1,0 +1,17 @@
+// ============================================================================
+// PTZ-Kamera im IoT-Labor, Routinen und Hinweise (virtuell)
+//   Kamera: Bewegung als Text-Befehl (UP, DOWN, LEFT, RIGHT, STOP), Zoom (IN, OUT, STOP)
+//   Routinen: Switch-Items, auf die Regeln reagieren
+//   Klingel/Alarm: Auslöser für die Rückmeldung am Leser (Kapitel 24 und 27)
+// ============================================================================
+
+Group iIoT_Kamera "PTZ-Kamera IoT-Labor" <camera> (gIoT) ["Camera"]
+String iIoT_Kamera_PTZ "Kamera bewegen [%s]" <camera> (iIoT_Kamera) ["Control"]
+String iIoT_Kamera_Zoom "Kamera-Zoom [%s]" <camera> (iIoT_Kamera) ["Control"]
+Number iIoT_Kamera_Preset "Kamera-Position [%d]" <camera> (iIoT_Kamera) ["Control"]
+
+Switch iApplikation_Morgenroutine_Start "Morgenroutine [%s]" <sun> ["Switch"]
+Switch iApplikation_Morgenroutine_Ausgangszustand "Ausgangszustand [%s]" <sun> ["Switch"]
+
+Switch iSmartHome_Klingel "Klingel [%s]" <bell> (gSmartHome) ["Alarm"]
+Switch iSmartHome_Alarm "Alarm [%s]" <siren> (gSmartHome) ["Alarm"]

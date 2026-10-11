@@ -1,0 +1,45 @@
+// ============================================================================
+// Kapitel 24 – Rückkanal: Signale an die Leser, Anlernen und Sperren aus openHAB (Rules DSL)
+// Datei: $OPENHAB_CONF/rules/nfc_rueckkanal.rules
+// Nur EINE Sprachvariante (DSL, JS oder Python) gleichzeitig aktivieren!
+// ============================================================================
+
+rule "NFC: Anlernen starten"
+when
+    Item NFC_Anlernen_Start received command ON
+then
+    val name  = NFC_Anlernen_Name.state.toString
+    val rolle = NFC_Anlernen_Rolle.state.toString
+    val leser = if (NFC_Anlernen_Leser.state == NULL) "nachttisch" else NFC_Anlernen_Leser.state.toString
+    if (NFC_Anlernen_Name.state == NULL || !name.matches("[a-z0-9_]{1,24}")) {
+        logWarn("nfc", "Anlernen: Name fehlt oder ungültig (a–z, 0–9, _)")
+        return;
+    }
+    val json = '{"name": "' + name + '", "role": "' + rolle + '", "leser": "' + leser + '"}'
+    NFC_Gateway_Anlernen.sendCommand(json)
+    sendCommand("NFC_" + leser.toFirstUpper + "_Signal", "learn")
+    logInfo("nfc", "Anlernen: nächste neue Karte am Leser " + leser + " wird " + name)
+end
+
+rule "NFC: Karte sperren oder entsperren"
+when
+    Item NFC_Sperren_Start received command
+then
+    if (NFC_Sperren_Name.state == NULL) return;
+    if (receivedCommand == ON) NFC_Gateway_Sperren.sendCommand(NFC_Sperren_Name.state.toString)
+    else NFC_Gateway_Entsperren.sendCommand(NFC_Sperren_Name.state.toString)
+end
+
+rule "NFC: Alarm an allen Lesern zeigen"
+when
+    Item iSmartHome_Alarm changed to ON
+then
+    gNFC.allMembers.filter[ i | i.name.endsWith("_Signal") ].forEach[ i | i.sendCommand("alarm") ]
+end
+
+rule "NFC: Alarmanlage scharf/unscharf am Flur bestätigen"
+when
+    Item iSmartHome_Alarmanlage_Scharf changed
+then
+    NFC_Flur_Signal.sendCommand(if (newState == ON) "deny" else "ok")
+end

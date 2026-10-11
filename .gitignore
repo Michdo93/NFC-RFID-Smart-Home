@@ -1,0 +1,23 @@
+# Lokale Konfiguration und Geheimnisse – NIE einchecken
+config/config.yaml
+config/secret.key
+config/tagdienst_benutzer.json
+firmware/*/include/secrets.h
+17-esp32-schreiben/esphome/secrets.yaml
+*.pem
+*.key
+mosquitto/passwd
+
+# Kartenregister, virtuelle Karten, Mitschnitte
+data/
+
+# Erzeugte Dateien
+output/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.pio/
+*.crt
+*.csr
+*.srl

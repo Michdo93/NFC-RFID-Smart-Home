@@ -1,0 +1,46 @@
+// ============================================================================
+// Philips-Hue-Lampen (virtuell) – orientiert am Hue-Binding (API v2)
+//   Thing-Typ: hue:device / hue:room   Channels:
+//     switch             -> Switch
+//     color              -> Color  (HSB "Hue,Sättigung,Helligkeit")
+//     brightness         -> Dimmer
+//     color-temperature  -> Dimmer (0 % = kalt ... 100 % = warm)
+//     scene              -> String
+// Namensschema wie in xbox-360-openhab-controller: <Raum>_Hue_Lampen_<Funktion>
+// ============================================================================
+
+
+Group iKueche_Hue_Lampen "Hue-Lampen Küche" <light> (gKueche) ["Lightbulb"]
+Switch iKueche_Hue_Lampen_Schalter "Licht Küche [%s]" <light> (iKueche_Hue_Lampen, gLichter) ["Switch", "Light"]
+Color  iKueche_Hue_Lampen_Farbe "Farbe Küche" <colorwheel> (iKueche_Hue_Lampen) ["Control", "Color"]
+Dimmer iKueche_Hue_Lampen_Helligkeit "Helligkeit Küche [%d %%]" <light> (iKueche_Hue_Lampen, gDimmbar) ["Control", "Light"]
+Dimmer iKueche_Hue_Lampen_Farbtemperatur "Farbtemperatur Küche [%d %%]" <colorlight> (iKueche_Hue_Lampen, gDimmbar) ["Control", "ColorTemperature"]
+String iKueche_Hue_Lampen_Szene "Szene Küche [%s]" <light> (iKueche_Hue_Lampen) ["Control"]
+
+Group iBad_Hue_Lampen "Hue-Lampen Bad" <light> (gBad) ["Lightbulb"]
+Switch iBad_Hue_Lampen_Schalter "Licht Bad [%s]" <light> (iBad_Hue_Lampen, gLichter) ["Switch", "Light"]
+Color  iBad_Hue_Lampen_Farbe "Farbe Bad" <colorwheel> (iBad_Hue_Lampen) ["Control", "Color"]
+Dimmer iBad_Hue_Lampen_Helligkeit "Helligkeit Bad [%d %%]" <light> (iBad_Hue_Lampen, gDimmbar) ["Control", "Light"]
+Dimmer iBad_Hue_Lampen_Farbtemperatur "Farbtemperatur Bad [%d %%]" <colorlight> (iBad_Hue_Lampen, gDimmbar) ["Control", "ColorTemperature"]
+String iBad_Hue_Lampen_Szene "Szene Bad [%s]" <light> (iBad_Hue_Lampen) ["Control"]
+
+Group iIoT_Hue_Lampen "Hue-Lampen IoT-Labor" <light> (gIoT) ["Lightbulb"]
+Switch iIoT_Hue_Lampen_Schalter "Licht IoT-Labor [%s]" <light> (iIoT_Hue_Lampen, gLichter) ["Switch", "Light"]
+Color  iIoT_Hue_Lampen_Farbe "Farbe IoT-Labor" <colorwheel> (iIoT_Hue_Lampen) ["Control", "Color"]
+Dimmer iIoT_Hue_Lampen_Helligkeit "Helligkeit IoT-Labor [%d %%]" <light> (iIoT_Hue_Lampen, gDimmbar) ["Control", "Light"]
+Dimmer iIoT_Hue_Lampen_Farbtemperatur "Farbtemperatur IoT-Labor [%d %%]" <colorlight> (iIoT_Hue_Lampen, gDimmbar) ["Control", "ColorTemperature"]
+String iIoT_Hue_Lampen_Szene "Szene IoT-Labor [%s]" <light> (iIoT_Hue_Lampen) ["Control"]
+
+Group iSmartHome_Hue_Lampen "Hue-Lampen Smart Home" <light> (gSmartHome) ["Lightbulb"]
+Switch iSmartHome_Hue_Lampen_Schalter "Licht Smart Home [%s]" <light> (iSmartHome_Hue_Lampen, gLichter) ["Switch", "Light"]
+Color  iSmartHome_Hue_Lampen_Farbe "Farbe Smart Home" <colorwheel> (iSmartHome_Hue_Lampen) ["Control", "Color"]
+Dimmer iSmartHome_Hue_Lampen_Helligkeit "Helligkeit Smart Home [%d %%]" <light> (iSmartHome_Hue_Lampen, gDimmbar) ["Control", "Light"]
+Dimmer iSmartHome_Hue_Lampen_Farbtemperatur "Farbtemperatur Smart Home [%d %%]" <colorlight> (iSmartHome_Hue_Lampen, gDimmbar) ["Control", "ColorTemperature"]
+String iSmartHome_Hue_Lampen_Szene "Szene Smart Home [%s]" <light> (iSmartHome_Hue_Lampen) ["Control"]
+
+Group iMultimedia_Hue_Lampen "Hue-Lampen Multimedia" <light> (gMultimedia) ["Lightbulb"]
+Switch iMultimedia_Hue_Lampen_Schalter "Licht Multimedia [%s]" <light> (iMultimedia_Hue_Lampen, gLichter) ["Switch", "Light"]
+Color  iMultimedia_Hue_Lampen_Farbe "Farbe Multimedia" <colorwheel> (iMultimedia_Hue_Lampen) ["Control", "Color"]
+Dimmer iMultimedia_Hue_Lampen_Helligkeit "Helligkeit Multimedia [%d %%]" <light> (iMultimedia_Hue_Lampen, gDimmbar) ["Control", "Light"]
+Dimmer iMultimedia_Hue_Lampen_Farbtemperatur "Farbtemperatur Multimedia [%d %%]" <colorlight> (iMultimedia_Hue_Lampen, gDimmbar) ["Control", "ColorTemperature"]
+String iMultimedia_Hue_Lampen_Szene "Szene Multimedia [%s]" <light> (iMultimedia_Hue_Lampen) ["Control"]

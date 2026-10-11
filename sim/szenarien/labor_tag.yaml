@@ -1,0 +1,19 @@
+# Kapitel 26 und 31 – ein Tag im Labor (vorher: labor_karten_anlernen.py --sim)
+leser: flur
+schritte:
+  - {nach: 0.5, karte: s50_karte_1}                          # Michael kommt: Tür, angemeldet
+  - {nach: 0.5, entfernen: true}
+  - {nach: 0.5, karte: ntag216_armband}                      # Gast Lea
+  - {nach: 0.5, entfernen: true}
+  - {nach: 0.5, karte: ntag213_sticker}                      # ein fremder Sticker
+  - {nach: 0.5, entfernen: true}
+  - {nach: 0.5, karte: ntag215_karte_1, leser: kueche}       # SWR3 in der Küche ...
+  - {nach: 3.0, entfernen: true, leser: kueche}              # ... bis die Karte weg ist
+  - {nach: 0.5, karte: ntag216_armband, leser: nachttisch}   # Gast am Nachttisch: nicht erlaubt
+  - {nach: 0.5, entfernen: true, leser: nachttisch}
+  - {nach: 0.5, karte: s50_karte_3, leser: multimedia}       # Kinoabend
+  - {nach: 0.5, entfernen: true, leser: multimedia}
+  - {nach: 0.5, karte: s50_karte_1}                          # Michael geht: 2 s liegen lassen
+  - {nach: 2.0, entfernen: true}
+  - {nach: 0.5, karte: s50_karte_2, leser: nachttisch}       # Gute Nacht
+  - {nach: 0.5, entfernen: true, leser: nachttisch}

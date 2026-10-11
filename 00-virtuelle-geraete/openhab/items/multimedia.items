@@ -1,0 +1,16 @@
+// ============================================================================
+// Multimedia-Raum (virtuell): Samsung-Fernseher und BenQ-Beamer
+//   TV-Tasten wie beim samsungtv-Binding (Kanal keyCode): KEY_UP, KEY_DOWN,
+//   KEY_LEFT, KEY_RIGHT, KEY_ENTER, KEY_RETURN, KEY_HOME, KEY_MENU ...
+// ============================================================================
+
+Group iMultimedia_Samsung_TV "Samsung TV" <screen> (gMultimedia) ["Television"]
+Switch iMultimedia_Samsung_TV_Power "TV [%s]" <screen> (iMultimedia_Samsung_TV) ["Switch", "Power"]
+Dimmer iMultimedia_Samsung_TV_Lautstaerke "TV-Lautstärke [%d %%]" <soundvolume> (iMultimedia_Samsung_TV, gDimmbar) ["Control", "SoundVolume"]
+Switch iMultimedia_Samsung_TV_Stumm "TV stumm [%s]" <soundvolume_mute> (iMultimedia_Samsung_TV) ["Switch", "SoundVolume"]
+Number iMultimedia_Samsung_TV_Kanal "Programm [%d]" <screen> (iMultimedia_Samsung_TV) ["Control", "Channel"]
+String iMultimedia_Samsung_TV_Taste "Taste [%s]" <screen> (iMultimedia_Samsung_TV) ["Control"]
+
+Group iMultimedia_Beamer "Beamer" <projector> (gMultimedia) ["Projector"]
+Switch iMultimedia_Beamer_Power "Beamer [%s]" <projector> (iMultimedia_Beamer) ["Switch", "Power"]
+String iMultimedia_Beamer_Quelle "Beamer-Quelle [%s]" <projector> (iMultimedia_Beamer) ["Control"]

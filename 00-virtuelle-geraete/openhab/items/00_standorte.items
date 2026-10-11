@@ -1,0 +1,25 @@
+// ============================================================================
+// Kapitel 0 – Semantisches Modell: Standorte
+//
+// Alle Geräte in diesem Repo sind VIRTUELL: Items ohne Thing/Channel.
+// Dank autoupdate übernehmen sie den gesendeten Befehl als Zustand und lassen
+// sich so ohne echte Hardware testen (Sitemap: sitemaps/nfc.sitemap).
+//
+// Mit echter Hardware wird nur die Channel-Bindung ergänzt, z. B.:
+//   Rollershutter iMultimedia_Somfy_Rollladen_Steuerung_Prozent "..."
+//       { channel="somfytahoma:rollershutter:bridge:multimedia:control" }
+// ============================================================================
+
+Group gLabor        "Smart-Home-Labor"           <house>     ["Building"]
+Group gKueche       "Küche"                      <kitchen>   (gLabor) ["Kitchen"]
+Group gBad          "Bad"                        <bath>      (gLabor) ["Bathroom"]
+Group gIoT          "IoT-Labor"                  <office>    (gLabor) ["Room"]
+Group gSmartHome    "Smart-Home-Raum"            <office>    (gLabor) ["Room"]
+Group gMultimedia   "Multimedia-Raum"            <video>     (gLabor) ["LivingRoom"]
+Group gKonferenz    "Konferenzraum"              <office>    (gLabor) ["Room"]
+
+// Funktionsgruppen (für Regeln wie "alle Rollläden")
+Group:Rollershutter:AVG gRollladen  "Alle Rollläden [%d %%]"   <rollershutter>
+Group:Rollershutter:AVG gJalousien  "Alle Jalousien [%d %%]"   <blinds>
+Group:Switch:OR(ON,OFF) gLichter    "Alle Lichter [%s]"        <light>
+Group gDimmbar "Dimmbare virtuelle Items (INCREASE/DECREASE per Regel)"

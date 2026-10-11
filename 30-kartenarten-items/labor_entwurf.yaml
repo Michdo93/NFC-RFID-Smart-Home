@@ -1,0 +1,98 @@
+# Kapitel 30 – der ERSTE Entwurf des Laborprofils, mit Absicht fehlerhaft:
+# Die Medienkarten stehen unter „actions“ und gelten damit auch am Nachttisch,
+# wo es kein Webradio gibt. profil_pruefen.py findet vier Ziele ohne Item.
+#   python3 30-kartenarten-items/profil_pruefen.py 30-kartenarten-items/labor_entwurf.yaml \
+#           --items 00-virtuelle-geraete/openhab/items
+name: Labor (erster Entwurf)
+readers:
+  nachttisch:
+    raum: iSmartHome
+  kueche:
+    raum: iKueche
+  flur:
+    raum: iIoT
+  multimedia:
+    raum: iMultimedia
+actions:
+  gute_nacht:present:
+  - command: gLichter
+    value: 'OFF'
+  - command: gRollladen
+    value: DOWN
+  - command: iSzene_Gute_Nacht
+    value: 'ON'
+  kinoabend:present:
+  - command: iMultimedia_Hue_Lampen_Helligkeit
+    value: '20'
+  - command: iMultimedia_Somfy_Rollladen_Steuerung
+    value: DOWN
+  - command: iMultimedia_Beamer_Power
+    value: 'ON'
+  - command: iSzene_Kinoabend
+    value: 'ON'
+  '#medien:present':
+    command: '{raum}_Webradio_{wert}'
+    value: 'ON'
+  '#medien:removed':
+    command: '{raum}_Webradio_{wert}'
+    value: 'OFF'
+reader_actions:
+  nachttisch:
+    '#bewohner:tap':
+      toggle: '{raum}_Hue_Lampen_Schalter'
+    '*:present':
+      update: iNachttisch_Karte_Liegt
+      value: 'ON'
+    '*:removed':
+      update: iNachttisch_Karte_Liegt
+      value: 'OFF'
+  flur:
+    '#bewohner:present':
+    - command: iLabor_Tuer_Oeffner
+      value: 'ON'
+    - update: iLabor_Zutritt_Letzter
+      value: '{label}'
+    - increment: iLabor_Zutritte
+    '#bewohner:tap':
+      update: iAnwesend_{wert}
+      value: 'ON'
+    '#bewohner:hold':
+    - update: iAnwesend_{wert}
+      value: 'OFF'
+    - feedback: signal
+      value: learn
+    '#gast:present':
+    - command: iLabor_Tuer_Oeffner
+      value: 'ON'
+    - update: iAnwesend_Gast
+      value: 'ON'
+    - update: iLabor_Zutritt_Letzter
+      value: 'Gast: {label}'
+    - increment: iLabor_Zutritte
+    '#admin:hold':
+      toggle: iSmartHome_Alarmanlage_Scharf
+    unknown:present:
+      update: iLabor_Zutritt_Letzter
+      value: unbekannte Karte
+    clone:present:
+      command: iSmartHome_Alarm
+      value: 'ON'
+    invalid:present:
+      update: iLabor_Zutritt_Letzter
+      value: ungültige Karte – prüfen/erneuern
+watch:
+  iSmartHome_Alarm:
+    'ON':
+      leser: '*'
+      signal: alarm
+  iSmartHome_Alarmanlage_Scharf:
+    'ON':
+      leser: flur
+      signal: deny
+    'OFF':
+      leser: flur
+      signal: ok
+  iSmartHome_Klingel:
+    'ON':
+      leser: nachttisch
+      signal: learn

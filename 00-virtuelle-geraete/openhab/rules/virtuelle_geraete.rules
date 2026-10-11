@@ -1,0 +1,20 @@
+// ============================================================================
+// Kapitel 0 – Hilfsregel nur für die VIRTUELLEN Geräte dieses Repos
+//
+// Ein Item ohne Binding übernimmt einen Befehl per autoupdate als Zustand – aber
+// nur, wenn der Befehl selbst ein gültiger Zustand ist. INCREASE und DECREASE sind
+// das nicht: Bei einer echten Hue-Lampe oder einem Sonos-Lautsprecher rechnet das
+// Binding, bei einem virtuellen Dimmer passiert ohne diese Regel gar nichts.
+// Mit echter Hardware wird die Regel nicht gebraucht (und sollte entfernt werden).
+// ============================================================================
+
+rule "Virtuelle Dimmer: INCREASE/DECREASE in 10er-Schritten"
+when
+    Member of gDimmbar received command
+then
+    if (receivedCommand != INCREASE && receivedCommand != DECREASE) return;
+    var int alt = 0
+    if (triggeringItem.state instanceof Number) alt = (triggeringItem.state as Number).intValue
+    val int neu = if (receivedCommand == INCREASE) Math::min(100, alt + 10) else Math::max(0, alt - 10)
+    triggeringItem.postUpdate(neu)
+end

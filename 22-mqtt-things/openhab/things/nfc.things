@@ -1,0 +1,75 @@
+// Kapitel 22 – Broker, Gateway und ein Thing je NFC-Leser
+// Datei: $OPENHAB_CONF/things/nfc.things
+//
+// Das Passwort steht hier nur als Platzhalter. Echtes Passwort nur auf dem Server
+// eintragen – oder das Broker-Thing in der Main UI anlegen.
+// JSONPATH braucht das Add-on „JSONPath Transformation“.
+
+Bridge mqtt:broker:mosquitto "Mosquitto" [
+    host="localhost", port=1883, secure=false,
+    username="openhab", password="CHANGE_ME",
+    clientID="openhab-nfc"
+] {
+    Thing topic nfc_gateway "NFC-Gateway" [
+        availabilityTopic="nfc/gateway/status", payloadAvailable="online", payloadNotAvailable="offline"
+    ] {
+        Channels:
+            Type string : status  "Status"           [ stateTopic="nfc/gateway/status" ]
+            Type string : learn   "Anlernen"         [ commandTopic="nfc/gateway/learn" ]
+            Type string : block   "Karte sperren"    [ commandTopic="nfc/gateway/block" ]
+            Type string : unblock "Karte entsperren" [ commandTopic="nfc/gateway/unblock" ]
+    }
+
+    Thing topic nfc_nachttisch "NFC-Leser Nachttisch" @ "Smart-Home-Raum" [
+        availabilityTopic="nfc/gateway/status", payloadAvailable="online", payloadNotAvailable="offline"
+    ] {   // ACR122U am Gateway-Pi: verfügbar, wenn das Gateway läuft
+        Channels:
+            Type string : event    "Ereignis"       [ stateTopic="nfc/nachttisch/event", trigger=true ]
+            Type string : gesture  "Geste (JSON)"   [ stateTopic="nfc/nachttisch/gesture", trigger=true ]
+            Type string : security "Sicherheit"     [ stateTopic="nfc/nachttisch/security", trigger=true ]
+            Type string : card     "Liegende Karte" [ stateTopic="nfc/nachttisch/card" ]
+            Type string : last     "Zuletzt (Name)" [ stateTopic="nfc/nachttisch/last", transformationPattern="JSONPATH:$.label" ]
+            Type string : status   "Zuletzt (Status)" [ stateTopic="nfc/nachttisch/last", transformationPattern="JSONPATH:$.status" ]
+            Type string : signal   "Signal"         [ commandTopic="nfc/nachttisch/set/signal" ]
+    }
+
+    Thing topic nfc_kueche "NFC-Leser Küche" @ "Küche" [
+        availabilityTopic="nfc/kueche/status", payloadAvailable="online", payloadNotAvailable="offline"
+    ] {
+        Channels:
+            Type string : event    "Ereignis"       [ stateTopic="nfc/kueche/event", trigger=true ]
+            Type string : gesture  "Geste (JSON)"   [ stateTopic="nfc/kueche/gesture", trigger=true ]
+            Type string : security "Sicherheit"     [ stateTopic="nfc/kueche/security", trigger=true ]
+            Type string : card     "Liegende Karte" [ stateTopic="nfc/kueche/card" ]
+            Type string : last     "Zuletzt (Name)" [ stateTopic="nfc/kueche/last", transformationPattern="JSONPATH:$.label" ]
+            Type string : status   "Zuletzt (Status)" [ stateTopic="nfc/kueche/last", transformationPattern="JSONPATH:$.status" ]
+            Type string : signal   "Signal"         [ commandTopic="nfc/kueche/set/signal" ]
+    }
+
+    Thing topic nfc_flur "NFC-Leser Flur" @ "IoT-Labor" [
+        availabilityTopic="nfc/flur/status", payloadAvailable="online", payloadNotAvailable="offline"
+    ] {
+        Channels:
+            Type string : event    "Ereignis"       [ stateTopic="nfc/flur/event", trigger=true ]
+            Type string : gesture  "Geste (JSON)"   [ stateTopic="nfc/flur/gesture", trigger=true ]
+            Type string : security "Sicherheit"     [ stateTopic="nfc/flur/security", trigger=true ]
+            Type string : card     "Liegende Karte" [ stateTopic="nfc/flur/card" ]
+            Type string : last     "Zuletzt (Name)" [ stateTopic="nfc/flur/last", transformationPattern="JSONPATH:$.label" ]
+            Type string : status   "Zuletzt (Status)" [ stateTopic="nfc/flur/last", transformationPattern="JSONPATH:$.status" ]
+            Type string : signal   "Signal"         [ commandTopic="nfc/flur/set/signal" ]
+    }
+
+    Thing topic nfc_multimedia "NFC-Leser Multimedia" @ "Multimedia-Raum" [
+        availabilityTopic="nfc/multimedia/status", payloadAvailable="online", payloadNotAvailable="offline"
+    ] {
+        Channels:
+            Type string : event    "Ereignis"       [ stateTopic="nfc/multimedia/event", trigger=true ]
+            Type string : gesture  "Geste (JSON)"   [ stateTopic="nfc/multimedia/gesture", trigger=true ]
+            Type string : security "Sicherheit"     [ stateTopic="nfc/multimedia/security", trigger=true ]
+            Type string : card     "Liegende Karte" [ stateTopic="nfc/multimedia/card" ]
+            Type string : last     "Zuletzt (Name)" [ stateTopic="nfc/multimedia/last", transformationPattern="JSONPATH:$.label" ]
+            Type string : status   "Zuletzt (Status)" [ stateTopic="nfc/multimedia/last", transformationPattern="JSONPATH:$.status" ]
+            Type string : signal   "Signal"         [ commandTopic="nfc/multimedia/set/signal" ]
+    }
+
+}

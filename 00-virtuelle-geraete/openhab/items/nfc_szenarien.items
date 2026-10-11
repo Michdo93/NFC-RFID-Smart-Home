@@ -1,0 +1,28 @@
+// ============================================================================
+// Virtuelle Items für die NFC-Szenarien (Kapitel 22, 30, 31)
+//
+//   Szenen       Switch-Items, auf die Regeln reagieren (ON = Szene starten)
+//   Anwesenheit  je Person ein Switch, dazu die Gruppe gAnwesend
+//   Zutritt      Türöffner und Zutrittsprotokoll des Labors
+//   Präsenz      „Karte liegt auf dem Leser“ – z. B. das Handy-Fach am Nachttisch
+//
+// Der Türöffner ist virtuell. expire="3s,command=OFF" schaltet ihn nach drei Sekunden
+// wieder aus – bei einem echten Türöffner unverzichtbar, damit er nie offen bleibt.
+// ============================================================================
+
+Switch iSzene_Gute_Nacht   "Szene Gute Nacht [%s]"   <moon>     ["Switch"]
+Switch iSzene_Willkommen   "Szene Willkommen [%s]"   <house>    ["Switch"]
+Switch iSzene_Kinoabend    "Szene Kinoabend [%s]"    <video>    ["Switch"]
+
+Group:Switch:OR(ON,OFF) gAnwesend "Jemand anwesend [%s]" <presence>
+Switch iAnwesend_Michael   "Michael anwesend [%s]"   <presence> (gAnwesend) ["Switch"]
+Switch iAnwesend_Gast      "Gast anwesend [%s]"      <presence> (gAnwesend) ["Switch"]
+
+Switch iLabor_Tuer_Oeffner "Türöffner Labor [%s]"    <door>     (gLabor) ["Switch"] { expire="3s,command=OFF" }
+Number iLabor_Zutritte     "Zutritte heute [%d]"     <door>     (gLabor)
+String iLabor_Zutritt_Letzter "Letzter Zutritt [%s]" <door>     (gLabor)
+
+Switch iSmartHome_Alarmanlage_Scharf "Alarmanlage scharf [%s]" <shield> (gSmartHome) ["Switch"]
+
+Switch iNachttisch_Karte_Liegt "Karte auf dem Nachttisch [%s]" <bedroom> ["Switch"]
+String iMultimedia_Medienkarte "Medienkarte [%s]" <video> (gMultimedia)
